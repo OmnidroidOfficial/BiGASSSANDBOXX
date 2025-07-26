@@ -1,0 +1,37 @@
+using static ShellWASM.Lists;
+
+namespace ShellWASM
+{
+    public class Observer
+    {
+        static public int Position { get; set; } = 0;
+        static public int Trigger { get; set; } = 999;
+        static public string? CurrentReference { get; set; } 
+        static public string RP { get; set; } = "";
+        static public string Referrer { get; set; } = "none";
+        static public string HelpTxt { get; set; } = "";
+        static public string ErrorTxt { get; set; } = "";
+        static public string PreviousLocation { get; set; } = "";
+        static public string FullPath { get; set; } = "";
+        static public bool Kick { get; set; } = false;
+        static public List<ObserverList> Type3 { get; set; } = new List<ObserverList>();
+        static public List<ObserverList> Type2 { get; set; } = new List<ObserverList>();
+        static public List<ObserverList> Type1 { get; set; } = new List<ObserverList>();
+
+        public class LF
+        {
+            public string? Context { get; set; }
+            public int Display { get; set; }
+            public string[]? Content { get; set; }
+        }
+
+        public class ObserverMode
+        {
+            public int? Indexer { get; set; }
+            public string? Context { get; set; }
+            public string? Title { get; set; }
+            public string[]? Content { get; set; }
+            public string? Description { get; set; }
+        }
+    }
+}
