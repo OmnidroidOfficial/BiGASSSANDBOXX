@@ -1,0 +1,164 @@
+@page "/layout_fixed"
+@inject ILocalStorageService _localstorage
+<h3>@Title</h3>
+<div hidden="@L6">
+    <h4>@Mains</h4>
+</div>
+<div hidden="@L4">
+    <p>Input balkje</p>
+    <input />
+</div>
+<div hidden="@L3">
+    <p>2 buttons</p>
+    <button>Button1</button>
+    <button>Button2</button>
+</div>
+<div hidden="@L2">
+    <p>3 buttons</p>
+    <button>Button1</button>
+    <button>Button2</button>
+    <button>Button3</button>
+</div>
+<div hidden="@L1">
+    <p>Rating</p>
+    <input @bind="@IRating" type="range" min="1" max="100" placeholder="50" step="10"/>
+    <button @onclick="@SetL1">Set</button>
+</div>
+<div hidden="@L5">
+    <button @onclick="@Starten">Start</button>
+</div>
+<div hidden="@L6"> 
+    <button @onclick="@PP">Previous</button>
+    <button @onclick="@NP">Next</button>
+    <p>Trigger: @Trigger</p>
+    <p>Position: @Position</p>
+    <p>Description: @Description</p>
+</div>
+@code {
+    static public int? IRating { get; set; }
+    static public int? IIndex { get; set; }
+    static public int? Position { get; set; }
+    static public int? Positions { get; set; }
+    static public int? Trigger { get; set; }
+    static public string? Description { get; set; }
+    static public string? IContent { get; set; }
+    static public string? Mains { get; set; }
+    static public string? Title { get; set; }
+    static public bool? L6 { get; set; } = true;
+    static public bool? L5 { get; set; } = true;
+    static public bool? L4 { get; set; } = true;
+    static public bool? L3 { get; set; } = true; 
+    static public bool? L2 { get; set; } = true;
+    static public bool? L1 { get; set; } = true;
+    static public List<Lists.TheContents> COne = new List<Lists.TheContents> { new Lists.TheContents(1, "Lorem ipsum dolor sit amet ..."), new Lists.TheContents(2, "... Current challenges are: ..."), new Lists.TheContents(3, "... the definition of the purpose of this app..."), new Lists.TheContents(4, "... and how this relates to SUGAR ..."), new Lists.TheContents(5, "... it must yield a shift in paradigm ..."), new Lists.TheContents(6, "... from SUGAR to SUGAR ..."), new Lists.TheContents(7, "... the app is the way to survive The Void ..."), new Lists.TheContents(8, "... \"The Void\" is what Dominique, the only woman in The Senate, is trying to prevent ..."), new Lists.TheContents(9, "... they listen, they understand, but it is less easy for them to deal with the stress ..."), new Lists.TheContents(10, "... what was there first, the chicken, or the egg?") };
+    static public List<Lists.TheContent> One = new List<Lists.TheContent> { new Lists.TheContent(1, "Configuration", "C001", true, 1, 10, COne, "\" Dequeue List \"") };
+    // Lists
+    public async void CC()
+    {
+        await _localstorage.SetItemAsStringAsync("Configuration", "Y");
+    }
+
+    public void ConfigurationComplete()
+    {
+        CC();
+    }
+
+    protected async Task SavingAsync()
+    {
+        await _localstorage.SetItemAsStringAsync("XOne", IRating.ToString()!);
+    }
+
+    public async void SetL1()
+    {
+        if (IRating is not null)
+        {
+            await SavingAsync();
+            ConfigurationComplete();
+            Mains = "The scale of yay has been defined!";
+
+        }
+        else
+        {
+            Mains = "The scale of yay is undefined.";
+        }
+    }
+
+    public void XOne()
+    {
+        if (Position == 13)
+        {
+        }
+        else if (Position == 12)
+        {
+            L1 = false;
+            Mains = "Now it is time to set the scale of yay";
+        }
+        else if (Position == 11)
+        {
+            Mains = "Hooray";
+        }
+        else if (Position == 10 || Position == 9 || Position == 8 || Position == 7 || Position == 6 || Position == 5 || Position == 4 || Position == 3 || Position == 2 || Position == 1)
+        {
+            var Huh = COne.Find(x => x.Index.Equals(Position));
+            IContent = Huh?.Content;
+            Mains = IContent;
+        }
+        else if (Position == 0)
+        {
+            var Huh2 = One.Find(y => y.Index.Equals(1));
+            Title = Huh2?.Title;
+            Description = Huh2?.Description;
+            Mains = "You are about to read some...";
+        }
+    }
+
+    public void NP()
+    {
+        switch(Trigger)
+        {
+            case 1:
+                XOne();
+                Position++;
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            default:
+                Mains = "Helaas";
+                break;
+        }
+    }
+
+    public void PP()
+    {
+        switch (Trigger)
+        {
+            case 1:
+                XOne();
+                Position--;
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            default:
+                Mains = "Helaas";
+                break;
+        }
+    }
+
+    static public void Starten()
+    {
+        Position = 0;
+        Mains = "Initializing...";
+        L5 = true;
+        L6 = false;
+    }
+
+    protected override void OnInitialized()
+    {
+        Trigger = Observer.Trigger;
+        L5 = Observer.Kick;
+    }
+}
