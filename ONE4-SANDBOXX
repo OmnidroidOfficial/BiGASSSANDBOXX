@@ -1,0 +1,77 @@
+@page "/"
+@inject HttpClient HTTP
+@inject ILocalStorageService _localstorage
+
+<PageTitle>Home</PageTitle>
+
+<h1>@HomeTxt</h1>
+<p>@Welcome</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Index</th>
+            <th>Context</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Content</th>
+            <th>Selector</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (testing is not null)
+        {
+        @foreach (var t in testing)
+        {
+            <tr>
+                <td>@t.Indexer</td>
+                <td>@t.Context</td>
+                <td>@t.Title</td>
+                <td>@t.Description</td>
+                <td>@(String.Join(Separator, t.Content!))</td>
+                <td>@(t.Content!.GetValue(3))</td>
+            </tr>
+        }
+        }
+    </tbody>
+</table>
+
+@code{
+    static public string Separator { get; set; } = "  |  ";
+    static public string PathName { get; set; } = "";
+    static public string Status { get; set; } = "";
+    static public string Welcome { get; set; } = "";
+    static public string HomeTxt { get; set; } = "";
+    static public string? Configured { get; set; }
+
+    private Observer.ObserverMode[]? testing;
+
+    protected override async Task OnInitializedAsync()
+    {
+        testing = await HTTP.GetFromJsonAsync<Observer.ObserverMode[]>("sample-data/main.json");
+        if (await _localstorage.ContainKeyAsync("Configuration"))
+        {
+            Configured = await _localstorage.GetItemAsStringAsync("Configuration");
+            if (Configured == "N")
+            {
+                Status = "ongoing";
+            }
+            else if (Configured == "Y")
+            {
+                Status = "completed";
+            }
+            Welcome = "Configuration" + Status;
+        }
+        else
+        {
+            Observer.Trigger = 1;
+            Welcome = "Configuration is next.";
+            // After progression 1 --> Configured = Y;
+            // While progression 1 --> Configured = N;   
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        Observer.PreviousLocation = "Menu";
+    }
+}
