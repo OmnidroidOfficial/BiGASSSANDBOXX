@@ -1,0 +1,63 @@
+namespace ShellWASM
+{
+    public class Lists
+    {
+        static public int? ListsProgression { get; set; }
+        
+        static public List<Progression> TheAdministrator = new List<Progression>() { new Progression(0, "Configuration", "TBD", Observer.Type1, "The pathway to configuration."), new Progression(1, "Round 2", "TBD", Observer.Type2, "Some other context of layouts"), new Progression(2, "Round 3", "TBD", Observer.Type3, "The final, most complex set of layouts")};
+        public class TheContents(int _index, string _content)
+        {
+            public int? Index { get; set; } = _index;
+            public string? Content { get; set; } = _content;
+        }
+        public class TheContent(int _index, string _title, string _contentreference, bool _displaytitle, int _layoutindex, int _contentlines, List<TheContents> _contents, string _description)
+        {
+            public int? Index { get; set; } = _index;
+            public string? Title { get; set; } = _title;
+            public string? ContentReference { get; set; } = _contentreference;
+            public bool? DisplayTitle { get; set; } = _displaytitle;
+            public int? LayoutIndex { get; set; } = _layoutindex;
+            public int? ContentLines { get; set; } = _contentlines;
+            public List<TheContents>? Contents { get; set; } = _contents;
+            public string? Description { get; set; } = _description;
+        }
+        public class ContentList(int _index, string _context, string _name, string[] _localreferrers, int _contentlists, List<TheContent> _contents, string _description)
+        {
+            public int? Index { get; set; } = _index;
+            public string? Context { get; set; } = _context;
+            public string? Name { get; set; } = _name;  
+            public string[]? LocalReferrers { get; set; } = _localreferrers;
+            public int? ContentLists { get; set; } = _contentlists;
+            public List<TheContent>? Contents { get; set; } = _contents;
+
+            public string? Description { get; set; } = _description;
+
+        }
+        public class LocalList(int _index, string _context, string _location, string _reference, List<ContentList> _cl, string _description)
+        {
+            public int? Index { get; set; } = _index;
+            public string? Context { get; set; } = _context;
+            public string? Location { get; set; } = _location;
+            public string? Reference { get; set; } = _reference;
+            public List<ContentList>? CL { get; set; } = _cl;
+            public string? Description { get; set; } = _description;
+        }
+        public class ObserverList(int _index, string _context, string _name, List<LocalList> _locallists, string _description)
+        {
+            public int? Index { get; set; } = _index;
+            public string? Context { get; set; } = _context;
+            public string? Name { get; set; } = _name;
+            //   public string? Location { get; set; }
+            public List<LocalList>? LocalLists { get; set; } = _locallists;
+            public string? Description { get; set; } = _description;
+        }
+        public class Progression(int _index, string _context, string _observerreference, List<ObserverList> _observing, string _description)
+        {
+            public int? Index { get; set; } = _index;
+            public string? Context { get; set; } = _context;
+            public string? ObserverReference { get; set; } = _observerreference;
+            public List<ObserverList>? Observing { get; set; } = _observing;
+            public string? Description { get; set; } = _description;
+        }
+    }
+}
